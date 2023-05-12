@@ -15,19 +15,18 @@ public class DbConnection {
   
   public static Connection getConnection() {
   //string variable   
-    String uri = 
-        String.format("jdbc:mysql://%s:%d/%s",HOST, PORT, SCHEMA);
-    try {
-      
-      Connection conn =  DriverManager.getConnection(uri, USER, PASSWORD);
-      //printed message got connection
-      System.out.printf("Got connection at %s%n", uri);
-      return conn;
-    } catch(SQLException e) {   //catch
-      //message if there is no connection
-      System.out.printf("Unable to get connection at %s%n", uri);
-      throw new DbException(e);  //throw
+    String url = 
+        String.format("jdbc:mysql://%s:%d/%s?user=%s&password=%s&useSSL=false", HOST, PORT, SCHEMA, USER, PASSWORD);
+ 
+        System.out.println("Connecting to:" + url);
     
-   }
-  }
+        try {
+            Connection conn = DriverManager.getConnection(url);
+            System.out.println("Successfully obtained connection!");
+            return conn;
+        } catch (SQLException e) {
+            System.out.println("Error getting connection.");
+            throw new DbException(e);
+        }
+    }
 }
