@@ -14,19 +14,21 @@ public class DbConnection {
   private static String USER = "projects";
   
   public static Connection getConnection() {
-  //string variable   
-    String url = 
-        String.format("jdbc:mysql://%s:%d/%s?user=%s&password=%s&useSSL=false", HOST, PORT, SCHEMA, USER, PASSWORD);
- 
-        System.out.println("Connecting to:" + url);
-    
-        try {
-            Connection conn = DriverManager.getConnection(url);
-            System.out.println("Successfully obtained connection!");
-            return conn;
-        } catch (SQLException e) {
-            System.out.println("Error getting connection.");
-            throw new DbException(e);
-        }
+    // string variable
+    String url = String.format("jdbc:mysql://%s:%d/%s?user=%s&password=%s&useSSL=false", 
+        HOST, PORT, SCHEMA, USER, PASSWORD);
+
+    try {
+
+      Connection conn = DriverManager.getConnection(url);
+      // printed message got connection
+      System.out.println("Successfully obtained connection!");
+      return conn;
+    } catch (SQLException e) { // catch
+      // message if there is no connection
+      System.out.printf("Unable to get connection at %s%n", url);
+      throw new DbException(e); // throw
+
     }
+  }
 }
