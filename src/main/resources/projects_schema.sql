@@ -29,7 +29,7 @@ CREATE TABLE project_category (
 );
 
 CREATE TABLE step (
-	step_id INT NOT NULL,
+	step_id INT AUTO_INCREMENT NOT NULL,
 	project_id INT NOT NULL,
 	step_text TEXT NOT NULL,
 	step_order INT NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE step (
 );
 
 CREATE TABLE material (
-	material_id INT NOT NULL,
+	material_id INT AUTO_INCREMENT NOT NULL,
 	project_id INT NOT NULL,
 	material_name VARCHAR(128) NOT NULL,
 	num_required INT,
@@ -46,3 +46,22 @@ CREATE TABLE material (
 	PRIMARY KEY (material_id),
 	FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE
 );
+
+INSERT INTO project (project_name, estimated_hours, actual_hours, difficulty, notes) VALUES ('Hang a door', 4, 3, 3, 'Use the door hangers from Home Depot');
+INSERT INTO material (project_id, material_name, num_required, cost) VALUES (1, 'Door', 1, 130.00);
+INSERT INTO material (project_id, material_name, num_required, cost) VALUES (1, '2-inch screws', 20, 9.99);
+INSERT INTO step (project_id, step_text, step_order) VALUES (1, 'Remove the door', 1);
+INSERT INTO step (project_id, step_text, step_order) VALUES (1, 'Position the prehung door', 2);
+INSERT INTO step (project_id, step_text, step_order) VALUES (1, 'Screw the door  hangers on the top and bottom of each side of the door frame', 3);
+INSERT INTO category (category_id, category_name) VALUES (1, 'Doors and Windows');
+INSERT INTO project_category (project_id, category_id) VALUES (1, 1);
+
+INSERT INTO project (project_name, estimated_hours, actual_hours, difficulty, notes) VALUES ('Remove a Kitchen Faucet', 2, 3, 3, 'Use the faucet from Home Depot');
+INSERT INTO material (project_id, material_name, num_required, cost) VALUES (2, 'Basin wrench', 1, 15.97);
+INSERT INTO material (project_id, material_name, num_required, cost) VALUES (2, 'Adjustable wrench', 1, 6.97);
+INSERT INTO step (project_id, step_text, step_order) VALUES (2, 'Turn off the water', 1);
+INSERT INTO step (project_id, step_text, step_order) VALUES (2, 'Disconnect supply lines', 2);
+INSERT INTO step (project_id, step_text, step_order) VALUES (2, 'Remove mounting nuts or screws', 3);
+INSERT INTO step (project_id, step_text, step_order) VALUES (2, 'Remove the faucet', 4);
+INSERT INTO category (category_id, category_name) VALUES (2, 'Kitchen Projects');
+INSERT INTO project_category (project_id, category_id) VALUES (2, 2);

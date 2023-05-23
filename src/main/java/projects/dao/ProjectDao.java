@@ -86,7 +86,7 @@ public List<Project> fetchAllProjects() {
        
        try(PreparedStatement stmt = conn.prepareStatement(sql)){
          try(ResultSet rs = stmt.executeQuery()){
-           List<Project> projects = new LinkedList<Project>();
+           List<Project> projects = new LinkedList<>();
            
            while(rs.next()) {
              projects.add(extract(rs, Project.class));
@@ -208,5 +208,72 @@ private List<Material> fetchMaterialsforProject(Connection conn,
     
   }
   
+}
+
+//Method to Update project details. 
+public boolean modifyProjectDetails(Project project) {
+  //@formatter:off
+ String sql = ""
+     + "UPDATE " + PROJECT_TABLE + " SET "    //Sql Statement
+     + "project_name = ?, "
+     + "estimated_hours = ?, "
+     + "actual_hours = ?, "
+     + "difficulty = ?, "
+     + "notes = ? "
+     + "WHERE project_id = ?";     
+ //formatter:on
+ // obtain a connection and start a transaction
+     try(Connection conn = DbConnection.getConnection()) {
+     startTransaction(conn);
+//obtain a prepared statement object and set the six parameters
+     
+     try(PreparedStatement stmt = conn.prepareStatement(sql)){
+       setParameter(stmt, 1, project.getProjectName(), String.class);
+       setParameter(stmt, 2, project.getEstimatedHours(), BigDecimal.class);
+       setParameter(stmt, 3, project.getActualHours(), BigDecimal.class);
+       setParameter(stmt, 4, project.getDifficulty(), Integer.class);
+       setParameter(stmt, 5, project.getNotes(), String.class);
+       setParameter(stmt, 6, project.getProjectId(), Integer.class);
+ 
+//call the executeUpdate()
+       boolean modified = stmt.executeUpdate() == 1;
+       commitTransaction(conn);
+ 
+       return modified;       
+       }
+     catch(Exception e) {
+       rollbackTransaction(conn);
+       throw new DbException(e);
+     }
+   } catch (SQLException e) {
+     throw new DbException(e);
+   }
+ }
+
+public boolean deleteProject(Integer projectId) {
+
+ String sql = "DELETE FROM " + PROJECT_TABLE + " WHERE project_id = ?";    //Sql Statement
+
+ // obtain a connection and start a transaction
+     try(Connection conn = DbConnection.getConnection()) {
+     startTransaction(conn);
+//obtain a prepared statement object and set the parameter
+     
+     try(PreparedStatement stmt = conn.prepareStatement(sql)){
+       setParameter(stmt, 1, projectId, Integer.class);
+     //call the executeUpdate()
+       boolean deleted = stmt.executeUpdate() == 1;
+       commitTransaction(conn);
+ 
+       return deleted;       
+       }
+     catch(Exception e) {
+       rollbackTransaction(conn);
+       throw new DbException(e);
+     }
+   } catch (SQLException e) {
+     throw new DbException(e);
+   }
+      
 }
 }
